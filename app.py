@@ -8,13 +8,12 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # --- 1. APP & DATABASE CONFIGURATION ---
-# --- 1. APP & DATABASE CONFIGURATION ---
 app = Flask(__name__)
-# IMPORTANT: Use an environment variable for the secret key in production
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'a_very_secret_and_hard_to_guess_key_for_dev')
 
-# Use environment variable for the database URL, with a fallback to local sqlite
-# This is the key change for deployment!
+# ---- FIX IS HERE ----
+basedir = os.path.abspath(os.path.dirname(__file__)) # Define basedir first
+
 DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///' + os.path.join(basedir, 'app.db'))
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
