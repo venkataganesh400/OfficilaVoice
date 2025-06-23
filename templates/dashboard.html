@@ -1,0 +1,12 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<style>.dash-container {padding: 4rem 0;}.card { padding: 2rem; background: var(--gradient); color:white; border-radius: 15px; text-align: center;}</style>
+<div class="dash-container">
+    <div class="card">
+        <h1>Welcome to Your Dashboard, {{ user.first_name }}!</h1>
+        <p>This is your central hub for all activities.</p>
+    </div>
+</div>
+{% endblock %}

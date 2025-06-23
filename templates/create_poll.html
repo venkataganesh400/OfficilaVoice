@@ -1,0 +1,32 @@
+<!-- templates/create_poll.html -->
+{% extends 'base.html' %}
+{% block title %}Create Poll{% endblock %}
+{% block content %}
+<style>.form-container{max-width:700px;margin:4rem auto; padding:2rem;background:white;border-radius:15px;box-shadow:var(--shadow);} html[data-theme='dark'] .form-container {background:#34495e;} .form-group input, .form-group textarea{width:100%; padding:.8rem; border-radius:8px; border:1px solid var(--border); margin-bottom:1rem;}.form-btn{width:100%; padding:1rem;border-radius:8px; border:none; background:var(--gradient);color:white;cursor:pointer;font-weight:600;}.add-option-btn{margin-top:1rem;background:var(--secondary);color:white;border:none;padding:.5rem 1rem;border-radius:5px;cursor:pointer;}</style>
+<div class="form-container">
+    <h1>Create a New Poll</h1>
+    <form method="POST">
+        <div class="form-group"><label for="topic">Topic</label><input type="text" name="topic" required></div>
+        <div class="form-group"><label for="description">Description</label><textarea name="description" rows="3"></textarea></div>
+        <div id="options-container">
+            <div class="form-group"><label>Option 1</label><input type="text" name="options" required></div>
+            <div class="form-group"><label>Option 2</label><input type="text" name="options" required></div>
+        </div>
+        <button type="button" class="add-option-btn" id="add-option">Add Option</button>
+        <button type="submit" class="form-btn">Submit Poll for Review</button>
+    </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+let optionCount = 2;
+document.getElementById('add-option').addEventListener('click', () => {
+    optionCount++;
+    const container = document.getElementById('options-container');
+    const newOptionDiv = document.createElement('div');
+    newOptionDiv.classList.add('form-group');
+    newOptionDiv.innerHTML = `<label>Option ${optionCount}</label><input type="text" name="options" required>`;
+    container.appendChild(newOptionDiv);
+});
+</script>
+{% endblock %}

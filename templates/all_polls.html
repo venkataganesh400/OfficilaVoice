@@ -1,0 +1,67 @@
+<!-- templates/all_polls.html -->
+{% extends 'base.html' %}
+{% block title %}Current Polls{% endblock %}
+{% block content %}
+<style>.poll-list-item { background:white; border:1px solid var(--border); border-radius:15px; margin-bottom:1.5rem; padding:1.5rem;} html[data-theme='dark'] .poll-list-item{background:#34495e;} .poll-options {margin:1rem 0;} .poll-option button{width:100%;text-align:left;padding:.8rem;margin-bottom:.5rem;border:1px solid var(--border);background:#f9f9f9;border-radius:8px;cursor:pointer;} .poll-option button.voted {background:var(--primary); color:white; border-color:var(--primary);} html[data-theme='dark'] .poll-option button {background:#4a6278; color:white; border-color:#5a7288;} .poll-meta{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;} .like-btn{background:none;border:none;cursor:pointer;font-size:1.2rem;} .like-btn.liked {color:#ff6b6b;}</style>
+<div class="container" style="padding-top:4rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1>Current Polls</h1>
+        <a href="{{url_for('create_poll')}}" style="text-decoration:none; padding:.8rem 1.5rem;background:var(--gradient);color:white;border-radius:50px;">Create a Poll</a>
+    </div>
+    <div style="margin-top:2rem;">
+        {% for poll in polls %}
+        <div class="poll-list-item" id="poll-{{ poll.id }}">
+            <h3>{{ poll.topic }}</h3>
+            <p style="opacity:0.8;">Posted by {{ poll.author.first_name }} on {{ poll.date_created.strftime('%b %d, %Y') }}</p>
+            <p>{{ poll.description }}</p>
+            <div class="poll-options">
+                {% for option in poll.options %}
+                <div class="poll-option">
+                    <button data-poll-id="{{ poll.id }}" data-option-id="{{ option.id }}" class="vote-btn {% if poll.id in user_votes and user_votes[poll.id] == option.id %}voted{% endif %}" {% if poll.id in user_votes %}disabled{% endif %}>
+                        {{ option.text }} ({{ option.votes.count() }} votes)
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="poll-meta">
+                <span>Total Votes: {{ poll.votes.count() }}</span>
+                <button class="like-btn {% if poll.id in user_likes %}liked{% endif %}" data-poll-id="{{ poll.id }}">
+                    <i class="fas fa-heart"></i> <span class="like-count">{{ poll.likes.count() }}</span>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.querySelectorAll('.vote-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const pollId = button.dataset.pollId;
+        const optionId = button.dataset.optionId;
+        fetch(`/polls/vote/${pollId}/${optionId}`, { method: 'POST' })
+        .then(res => res.json()).then(data => {
+            if(data.success) {
+                alert('Thank you for voting!');
+                window.location.reload();
+            } else {
+                alert(data.message);
+            }
+        });
+    });
+});
+document.querySelectorAll('.like-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const pollId = button.dataset.pollId;
+        fetch(`/polls/like/${pollId}`, { method: 'POST' })
+        .then(res => res.json()).then(data => {
+            if(data.success) {
+                button.classList.toggle('liked', data.liked);
+                button.querySelector('.like-count').textContent = data.count;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

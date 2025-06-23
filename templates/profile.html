@@ -1,0 +1,21 @@
+<!-- templates/profile.html -->
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<style>.profile-card {max-width:600px; margin: 4rem auto; background:white;border-radius:15px;padding:2rem;text-align:center;} html[data-theme='dark'] .profile-card {background:#34495e;} .delete-btn {color: #dc3545;text-decoration:none;font-weight:600;display:inline-block;margin-top:2rem;}</style>
+<div class="profile-card">
+    <h1>{{user.first_name}} {{user.last_name}}</h1>
+    <p>Email: {{user.email}}</p>
+    <p>Voter ID: {{user.voter_id}}</p>
+    <a href="{{url_for('delete_account')}}" class="delete-btn" id="delete-link">Delete My Account</a>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('delete-link').addEventListener('click', (e) => {
+    if(!confirm("This is a permanent action that requires admin approval. Are you sure you wish to proceed? We're sad to see you go.")) {
+        e.preventDefault();
+    }
+});
+</script>
+{% endblock %}

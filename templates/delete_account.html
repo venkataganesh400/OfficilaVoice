@@ -1,0 +1,14 @@
+<!-- templates/delete_account.html -->
+{% extends 'base.html' %}
+{% block title %}Delete Account{% endblock %}
+{% block content %}
+<style>.form-container{max-width:700px;margin:4rem auto; padding:2rem;background:white;border-radius:15px;box-shadow:var(--shadow);} html[data-theme='dark'] .form-container {background:#34495e;} .form-group textarea{width:100%; padding:.8rem; border-radius:8px; border:1px solid var(--border); margin-bottom:1rem;}.form-btn{width:100%; padding:1rem;border-radius:8px; border:none; background:#dc3545;color:white;cursor:pointer;font-weight:600;}</style>
+<div class="form-container">
+    <h1>Account Deletion Request</h1>
+    <p>We are sorry to see you go. Please let us know the reason for your departure so we can improve our platform. This request will be sent to an admin for final approval.</p>
+    <form method="POST">
+        <div class="form-group"><label for="reason">Reason for leaving:</label><textarea name="reason" rows="5" required></textarea></div>
+        <button type="submit" class="form-btn">Submit Deletion Request</button>
+    </form>
+</div>
+{% endblock %}
